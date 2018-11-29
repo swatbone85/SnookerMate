@@ -1,199 +1,195 @@
-﻿//using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
-//namespace SnookerMate
-//{
-//    public class GameView : ContentView
-//    {
-//        bool isPlayer1Turn;
-//        Player Player1, Player2;
-//        CLabel player1Label, player1Score, player2Label, player2Score;
+namespace SnookerMate
+{
+    public class GameView : ContentView
+    {
+        static GamePage page;
+        readonly CLabel player1Label, player1Score, player2Label, player2Score;
 
-//        public GameView()
-//        {
-//            BindingContext = new GameViewModel();
-//            BackgroundColor = ColorTheme.BackgroundGreen;
+        public GameView()
+        {
+            BindingContext = new GameViewModel();
+            BackgroundColor = ColorTheme.BackgroundGreen;
 
-//            isPlayer1Turn = true;
+            #region Players and Scores
+            player1Label = new CLabel
+            {
+                FontSize = 24
+            };
+            player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
 
-//            Player1 = new Player
-//            {
-//                Name = "Player 1",
-//                Score = 0
-//            };
+            player1Score = new CLabel
+            {
+                FontSize = 72
+            };
+            player1Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Score));
 
-//            Player2 = new Player
-//            {
-//                Name = "Player 2",
-//                Score = 0
-//            };
+            player2Label = new CLabel
+            {
+                FontSize = 24
+            };
+            player2Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Name));
 
-//            #region Players and Scores
-//            player1Label = new CLabel
-//            {
-//                Text = Player1.Name,
-//                FontSize = 24
-//            };
-//            player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1.Name));
+            player2Score = new CLabel
+            {
+                FontSize = 72
+            };
+            player2Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Score));
 
-//            player1Score = new CLabel
-//            {
-//                Text = Player1.Score.ToString(),
-//                FontSize = 72
-//            };
+            var playersAndScoresGrid = new Grid
+            {
+                RowDefinitions = {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                },
+                Margin = new Thickness(0, 50, 0, 0)
+            };
+            playersAndScoresGrid.Children.Add(player1Label, 0, 0);
+            playersAndScoresGrid.Children.Add(player1Score, 0, 1);
+            playersAndScoresGrid.Children.Add(player2Label, 1, 0);
+            playersAndScoresGrid.Children.Add(player2Score, 1, 1);
 
-//            player2Label = new CLabel
-//            {
-//                Text = Player2.Name,
-//                FontSize = 24
-//            };
+            #endregion
 
-//            player2Score = new CLabel
-//            {
-//                Text = Player2.Score.ToString(),
-//                FontSize = 72
-//            };
+            #region End Turn Button
+            var endTurnButton = new CButton
+            {
+                Text = "End Turn",
+                FontSize = 24,
+                HeightRequest = 60
+            };
+            endTurnButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.EndTurnCommand));
 
-//            var playersAndScoresGrid = new Grid
-//            {
-//                RowDefinitions = {
-//                    new RowDefinition { Height = GridLength.Auto },
-//                    new RowDefinition { Height = GridLength.Auto }
-//                },
-//                Margin = new Thickness(0, 50, 0, 0)
-//            };
-//            playersAndScoresGrid.Children.Add(player1Label, 0, 0);
-//            playersAndScoresGrid.Children.Add(player1Score, 0, 1);
-//            playersAndScoresGrid.Children.Add(player2Label, 1, 0);
-//            playersAndScoresGrid.Children.Add(player2Score, 1, 1);
+            #endregion
 
-//            #endregion
+            #region Ball Buttons
+            var whiteButton = new CButton
+            {
+                BackgroundColor = ColorTheme.White
+            };
+            whiteButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.WhiteBallCommand));
 
-//            #region End Turn Button
-//            var endTurnButton = new CButton
-//            {
-//                Text = "End Turn",
-//                FontSize = 24,
-//                HeightRequest = 60
-//            };
+            var foulButton = new CButton
+            {
+                BackgroundColor = ColorTheme.FoulButton
+            };
 
-//            #endregion
+            var redButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Red
+            };
+            redButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.RedBallCommand));
 
-//            #region Ball Buttons
-//            var whiteButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.White
-//            };
-//            whiteButton.Clicked += WhiteButton_Clicked;
+            var yellowButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Yellow
+            };
+            yellowButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.YellowBallCommand));
 
-//            var foulButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.FoulButton
-//            };
+            var greenButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Green
+            };
+            greenButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.GreenBallCommand));
 
-//            var redButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Red
-//            };
+            var brownButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Brown
+            };
+            brownButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BrownBallCommand));
 
-//            var yellowButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Yellow
-//            };
+            var blueButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Blue
+            };
+            blueButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BlueBallCommand));
 
-//            var greenButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Green
-//            };
+            var pinkButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Pink
+            };
+            pinkButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.PinkBallCommand));
 
-//            var brownButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Brown
-//            };
+            var blackButton = new CButton
+            {
+                BackgroundColor = ColorTheme.Black
+            };
+            blackButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BlackBallCommand));
 
-//            var blueButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Blue
-//            };
+            #endregion
 
-//            var pinkButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Pink
-//            };
+            #region bottomBarButtons
+            var undoButton = new CButton
+            {
+                Text = "Undo"
+            };
 
-//            var blackButton = new CButton
-//            {
-//                BackgroundColor = ColorTheme.Black
-//            };
+            var endFrameButton = new CButton
+            {
+                Text = "End Frame"
+            };
+            endFrameButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.EndFrameCommand));
 
-//            #endregion
+            var settingsButton = new CButton
+            {
+                Text = "Settings"
+            };
 
-//            #region bottomBarButtons
-//            var undoButton = new CButton
-//            {
-//                Text = "Undo"
-//            };
+            #endregion
 
-//            var endFrameButton = new CButton
-//            {
-//                Text = "End Frame"
-//            };
+            var buttonGrid = new Grid
+            {
+                RowDefinitions = {
+                    new RowDefinition { Height = new GridLength(125) },
+                    new RowDefinition { Height = new GridLength(125) },
+                    new RowDefinition { Height = new GridLength(125) },
+                    new RowDefinition { Height = new GridLength(60) }
+                },
+                RowSpacing = 0,
+                ColumnSpacing = 0
+            };
+            buttonGrid.Children.Add(whiteButton, 0, 0);
+            buttonGrid.Children.Add(foulButton, 1, 0);
+            buttonGrid.Children.Add(redButton, 2, 0);
+            buttonGrid.Children.Add(yellowButton, 0, 1);
+            buttonGrid.Children.Add(greenButton, 1, 1);
+            buttonGrid.Children.Add(brownButton, 2, 1);
+            buttonGrid.Children.Add(blueButton, 0, 2);
+            buttonGrid.Children.Add(pinkButton, 1, 2);
+            buttonGrid.Children.Add(blackButton, 2, 2);
+            buttonGrid.Children.Add(undoButton, 0, 3);
+            buttonGrid.Children.Add(endFrameButton, 1, 3);
+            buttonGrid.Children.Add(settingsButton, 2, 3);
 
-//            var settingsButton = new CButton
-//            {
-//                Text = "Settings"
-//            };
+            var contentGrid = new Grid
+            {
+                RowDefinitions = {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Star },
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                },
+                RowSpacing = 0,
+                ColumnSpacing = 0
+            };
+            contentGrid.Children.Add(playersAndScoresGrid, 0, 0);
+            contentGrid.Children.Add(endTurnButton, 0, 2);
+            contentGrid.Children.Add(buttonGrid, 0, 3);
 
-//            #endregion
+            Content = contentGrid;
+        }
 
-//            var buttonGrid = new Grid
-//            {
-//                RowDefinitions = {
-//                    new RowDefinition { Height = new GridLength(125) },
-//                    new RowDefinition { Height = new GridLength(125) },
-//                    new RowDefinition { Height = new GridLength(125) },
-//                    new RowDefinition { Height = new GridLength(60) }
-//                },
-//                RowSpacing = 0,
-//                ColumnSpacing = 0
-//            };
-//            buttonGrid.Children.Add(whiteButton, 0, 0);
-//            buttonGrid.Children.Add(foulButton, 1, 0);
-//            buttonGrid.Children.Add(redButton, 2, 0);
-//            buttonGrid.Children.Add(yellowButton, 0, 1);
-//            buttonGrid.Children.Add(greenButton, 1, 1);
-//            buttonGrid.Children.Add(brownButton, 2, 1);
-//            buttonGrid.Children.Add(blueButton, 0, 2);
-//            buttonGrid.Children.Add(pinkButton, 1, 2);
-//            buttonGrid.Children.Add(blackButton, 2, 2);
-//            buttonGrid.Children.Add(undoButton, 0, 3);
-//            buttonGrid.Children.Add(endFrameButton, 1, 3);
-//            buttonGrid.Children.Add(settingsButton, 2, 3);
+        //void EndFrameButton_Clicked(object sender, EventArgs e)
+        //{
+        //    var endFrame = page.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
 
-//            var contentGrid = new Grid
-//            {
-//                RowDefinitions = {
-//                    new RowDefinition { Height = GridLength.Auto },
-//                    new RowDefinition { Height = GridLength.Star },
-//                    new RowDefinition { Height = GridLength.Auto },
-//                    new RowDefinition { Height = GridLength.Auto }
-//                },
-//                RowSpacing = 0,
-//                ColumnSpacing = 0
-//            };
-//            contentGrid.Children.Add(playersAndScoresGrid, 0, 0);
-//            contentGrid.Children.Add(endTurnButton, 0, 2);
-//            contentGrid.Children.Add(buttonGrid, 0, 3);
+        //    if (endFrame.Equals(true))
+        //    {
+        //        System.Diagnostics.Debug.WriteLine("Frame Ended");
+        //    }
+        //}
 
-//            Content = contentGrid;
-//        }
-
-//        void WhiteButton_Clicked(object sender, System.EventArgs e)
-//        {
-//            if (isPlayer1Turn)
-//            {
-//                Player2.Score += 4;
-//            }
-//        }
-
-//    }
-//}
+    }
+}

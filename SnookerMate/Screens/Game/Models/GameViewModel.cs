@@ -237,10 +237,9 @@ namespace SnookerMate
             }
         }
 
-        // TODO
         void ExecuteEndFrameCommand(object obj)
         {
-
+            var endFrame = Application.Current.MainPage.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
         }
 
         #endregion
