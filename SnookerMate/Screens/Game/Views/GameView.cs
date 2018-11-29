@@ -1,12 +1,13 @@
-﻿using System;
+﻿
 using Xamarin.Forms;
 
 namespace SnookerMate
 {
     public class GameView : ContentView
     {
-        static GamePage page;
         readonly CLabel player1Label, player1Score, player2Label, player2Score;
+        readonly BallButton whiteButton, foulButton, redButton, yellowButton, greenButton, brownButton, blueButton, pinkButton, blackButton;
+        readonly ToolBarButton undoButton, endFrameButton, settingsButton;
 
         public GameView()
         {
@@ -65,54 +66,54 @@ namespace SnookerMate
             #endregion
 
             #region Ball Buttons
-            var whiteButton = new CButton
+            whiteButton = new BallButton
             {
                 BackgroundColor = ColorTheme.White
             };
             whiteButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.WhiteBallCommand));
 
-            var foulButton = new CButton
+            foulButton = new BallButton
             {
                 BackgroundColor = ColorTheme.FoulButton
             };
 
-            var redButton = new CButton
+            redButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Red
             };
             redButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.RedBallCommand));
 
-            var yellowButton = new CButton
+            yellowButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Yellow
             };
             yellowButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.YellowBallCommand));
 
-            var greenButton = new CButton
+            greenButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Green
             };
             greenButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.GreenBallCommand));
 
-            var brownButton = new CButton
+            brownButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Brown
             };
             brownButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BrownBallCommand));
 
-            var blueButton = new CButton
+            blueButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Blue
             };
             blueButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BlueBallCommand));
 
-            var pinkButton = new CButton
+            pinkButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Pink
             };
             pinkButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.PinkBallCommand));
 
-            var blackButton = new CButton
+            blackButton = new BallButton
             {
                 BackgroundColor = ColorTheme.Black
             };
@@ -121,18 +122,18 @@ namespace SnookerMate
             #endregion
 
             #region bottomBarButtons
-            var undoButton = new CButton
+            undoButton = new ToolBarButton
             {
                 Text = "Undo"
             };
 
-            var endFrameButton = new CButton
+            endFrameButton = new ToolBarButton
             {
                 Text = "End Frame"
             };
             endFrameButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.EndFrameCommand));
 
-            var settingsButton = new CButton
+            settingsButton = new ToolBarButton
             {
                 Text = "Settings"
             };
@@ -142,10 +143,10 @@ namespace SnookerMate
             var buttonGrid = new Grid
             {
                 RowDefinitions = {
-                    new RowDefinition { Height = new GridLength(125) },
-                    new RowDefinition { Height = new GridLength(125) },
-                    new RowDefinition { Height = new GridLength(125) },
-                    new RowDefinition { Height = new GridLength(60) }
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
                 },
                 RowSpacing = 0,
                 ColumnSpacing = 0
@@ -180,16 +181,5 @@ namespace SnookerMate
 
             Content = contentGrid;
         }
-
-        //void EndFrameButton_Clicked(object sender, EventArgs e)
-        //{
-        //    var endFrame = page.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
-
-        //    if (endFrame.Equals(true))
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("Frame Ended");
-        //    }
-        //}
-
     }
 }
