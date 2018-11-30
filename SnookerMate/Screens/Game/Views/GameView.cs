@@ -21,7 +21,6 @@ namespace SnookerMate
                 FontFamily = "Montserrat-SemiBold"
             };
             player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
-            player1Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.FontAttributes));
 
             player1Score = new CLabel
             {

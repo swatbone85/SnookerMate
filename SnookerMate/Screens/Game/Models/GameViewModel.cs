@@ -52,16 +52,6 @@ namespace SnookerMate
             set => SetProperty(ref player2Score, value);
         }
 
-        FontAttributes fontAttributes;
-        public FontAttributes FontAttributes
-        {
-            get
-            {
-                return IsPlayer1Turn ? FontAttributes.Bold : FontAttributes.None;
-            }
-
-            set => SetProperty(ref fontAttributes, value);
-        }
         #endregion
 
         #region White ball command
@@ -237,10 +227,7 @@ namespace SnookerMate
 
         void ExecuteEndTurnCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                IsPlayer1Turn = false;
-            else
-                IsPlayer1Turn = true;
+            IsPlayer1Turn = !IsPlayer1Turn;
         }
         #endregion
 
