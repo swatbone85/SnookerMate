@@ -5,7 +5,7 @@ namespace SnookerMate
     {
         public BallButton()
         {
-            HeightRequest = 100;
+            HeightRequest = 75;
         }
     }
 }

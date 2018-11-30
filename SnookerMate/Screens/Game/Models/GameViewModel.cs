@@ -43,8 +43,18 @@ namespace SnookerMate
             get { return player2Score; }
             set => SetProperty(ref player2Score, value);
         }
-        #endregion
 
+        FontAttributes fontAttributes;
+        public FontAttributes FontAttributes
+        {
+            get
+            {
+                return IsPlayer1Turn ? FontAttributes.Bold : FontAttributes.None;
+            }
+
+            set => SetProperty(ref fontAttributes, value);
+        }
+        #endregion
 
         #region White ball command
         Command whiteBallCommand;
@@ -237,11 +247,16 @@ namespace SnookerMate
             }
         }
 
-        void ExecuteEndFrameCommand(object obj)
+        async void ExecuteEndFrameCommand(object obj)
         {
-            var endFrame = Application.Current.MainPage.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
-        }
+            var endFrame = await Application.Current.MainPage.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
 
+            if (endFrame.Equals(true))
+            {
+                Player1Score = 0;
+                Player2Score = 0;
+            }
+        }
         #endregion
 
     }

@@ -6,6 +6,7 @@ namespace SnookerMate
         public ToolBarButton()
         {
             HeightRequest = 50;
+            FontSize = 16;
         }
     }
 }

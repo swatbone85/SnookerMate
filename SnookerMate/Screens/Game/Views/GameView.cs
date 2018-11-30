@@ -6,6 +6,7 @@ namespace SnookerMate
     public class GameView : ContentView
     {
         readonly CLabel player1Label, player1Score, player2Label, player2Score;
+        readonly CButton endTurnButton;
         readonly BallButton whiteButton, foulButton, redButton, yellowButton, greenButton, brownButton, blueButton, pinkButton, blackButton;
         readonly ToolBarButton undoButton, endFrameButton, settingsButton;
 
@@ -20,6 +21,7 @@ namespace SnookerMate
                 FontSize = 24
             };
             player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
+            player1Label.SetBinding(Label.FontAttributesProperty, nameof(GameViewModel.FontAttributes));
 
             player1Score = new CLabel
             {
@@ -32,6 +34,7 @@ namespace SnookerMate
                 FontSize = 24
             };
             player2Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Name));
+            player2Label.FontFamily = "Montserrat-Thin";
 
             player2Score = new CLabel
             {
@@ -55,11 +58,9 @@ namespace SnookerMate
             #endregion
 
             #region End Turn Button
-            var endTurnButton = new CButton
+            endTurnButton = new CButton
             {
-                Text = "End Turn",
-                FontSize = 24,
-                HeightRequest = 60
+                Text = "End Turn"
             };
             endTurnButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.EndTurnCommand));
 
