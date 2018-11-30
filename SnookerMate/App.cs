@@ -4,9 +4,12 @@ namespace SnookerMate
 {
     public class App : Application
     {
+        public static GameViewModel GameVM = new GameViewModel();
+
         public App()
         {
-            MainPage = new GamePage { BindingContext = new GameViewModel() };
+            var mainPage = new GamePage { BindingContext = new GameViewModel() };
+            MainPage = mainPage;
         }
     }
 }

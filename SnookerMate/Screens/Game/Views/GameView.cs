@@ -12,33 +12,35 @@ namespace SnookerMate
 
         public GameView()
         {
-            BindingContext = new GameViewModel();
             BackgroundColor = ColorTheme.BackgroundGreen;
 
             #region Players and Scores
             player1Label = new CLabel
             {
-                FontSize = 24
+                FontSize = 24,
+                FontFamily = "Montserrat-SemiBold"
             };
             player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
-            player1Label.SetBinding(Label.FontAttributesProperty, nameof(GameViewModel.FontAttributes));
+            player1Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.FontAttributes));
 
             player1Score = new CLabel
             {
-                FontSize = 72
+                FontSize = 72,
+                FontFamily = "Montserrat-SemiBold"
             };
             player1Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Score));
 
             player2Label = new CLabel
             {
-                FontSize = 24
+                FontSize = 24,
+                FontFamily = "Montserrat-Thin"
             };
             player2Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Name));
-            player2Label.FontFamily = "Montserrat-Thin";
 
             player2Score = new CLabel
             {
-                FontSize = 72
+                FontSize = 72,
+                FontFamily = "Montserrat-Thin"
             };
             player2Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Score));
 
@@ -54,7 +56,6 @@ namespace SnookerMate
             playersAndScoresGrid.Children.Add(player1Score, 0, 1);
             playersAndScoresGrid.Children.Add(player2Label, 1, 0);
             playersAndScoresGrid.Children.Add(player2Score, 1, 1);
-
             #endregion
 
             #region End Turn Button
@@ -63,7 +64,6 @@ namespace SnookerMate
                 Text = "End Turn"
             };
             endTurnButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.EndTurnCommand));
-
             #endregion
 
             #region Ball Buttons
@@ -119,7 +119,6 @@ namespace SnookerMate
                 BackgroundColor = ColorTheme.Black
             };
             blackButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.BlackBallCommand));
-
             #endregion
 
             #region bottomBarButtons
@@ -138,7 +137,7 @@ namespace SnookerMate
             {
                 Text = "Settings"
             };
-
+            settingsButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.SettingsCommand));
             #endregion
 
             var buttonGrid = new Grid

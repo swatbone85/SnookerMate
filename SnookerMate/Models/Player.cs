@@ -2,9 +2,20 @@
 
 namespace SnookerMate
 {
-    public class Player
+    public class Player : ObservableObject
     {
-        public String Name { get; set; }
-        public int Score { get; set; }
+        string name = "Player";
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                SetProperty(ref name, value);
+            }
+        }
+        public int Score { get; set; } = 0;
     }
 }

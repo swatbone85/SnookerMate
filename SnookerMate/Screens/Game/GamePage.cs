@@ -6,7 +6,10 @@ namespace SnookerMate
     {
         public GamePage()
         {
-            Content = new GameView();
+            Content = new GameView
+            {
+                BindingContext = App.GameVM
+            };
         }
     }
 }

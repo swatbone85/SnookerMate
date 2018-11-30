@@ -27,5 +27,8 @@
     <Folder Include="Theme\Colors\" />
     <Folder Include="Models\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Screens\Settings\" />
+    <Folder Include="Screens\Settings\Views\" />
+    <Folder Include="Screens\Settings\Models\" />
   </ItemGroup>
 </Project>

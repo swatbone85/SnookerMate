@@ -14,7 +14,15 @@ namespace SnookerMate
         int BlackPot = 7;
 
         #region Properties
-        public bool IsPlayer1Turn { get; set; } = true;
+        bool isPlayer1Turn = true;
+        public bool IsPlayer1Turn
+        {
+            get
+            {
+                return isPlayer1Turn;
+            }
+            set => SetProperty(ref isPlayer1Turn, value);
+        }
 
         string player1Name = "Player 1";
         public string Player1Name
@@ -257,6 +265,21 @@ namespace SnookerMate
                 Player2Score = 0;
             }
         }
+        #endregion
+
+        #region Settings command
+        Command settingsCommand;
+        public Command SettingsCommand
+        {
+            get
+            {
+                return settingsCommand ??
+                    (settingsCommand = new Command(ExecuteSettingsCommand));
+            }
+        }
+
+        async void ExecuteSettingsCommand(object obj) => await Application.Current.MainPage.Navigation.PushModalAsync(new SettingsPage());
+
         #endregion
 
     }
