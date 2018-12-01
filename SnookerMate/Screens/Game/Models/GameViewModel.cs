@@ -13,42 +13,53 @@ namespace SnookerMate
         int PinkPot = 6;
         int BlackPot = 7;
 
+        int numberOfRedBalls = 15;
+        public int NumberOfRedBalls
+        {
+            get => numberOfRedBalls;
+            set => SetProperty(ref numberOfRedBalls, value);
+        }
+
         #region Properties
         bool isPlayer1Turn = true;
         public bool IsPlayer1Turn
         {
-            get
-            {
-                return isPlayer1Turn;
-            }
+            get => isPlayer1Turn;
             set => SetProperty(ref isPlayer1Turn, value);
+        }
+
+        int pointsLeft = 147;
+        public int PointsLeft
+        {
+            get => pointsLeft;
+            set => SetProperty(ref pointsLeft, value);
         }
 
         string player1Name = "Player 1";
         public string Player1Name
         {
-            get { return player1Name; }
+            get => player1Name;
             set => SetProperty(ref player1Name, value);
         }
 
         int player1Score;
         public int Player1Score
         {
-            get { return player1Score; }
+            get => player1Score;
             set => SetProperty(ref player1Score, value);
         }
 
         string player2Name = "Player 2";
         public string Player2Name
         {
-            get { return player2Name; }
+            get => player2Name;
             set => SetProperty(ref player2Name, value);
         }
 
         int player2Score;
         public int Player2Score
         {
-            get { return player2Score; }
+            get => player2Score;
             set => SetProperty(ref player2Score, value);
         }
 
@@ -91,6 +102,8 @@ namespace SnookerMate
                 Player1Score += RedPot;
             else
                 Player2Score += RedPot;
+
+            numberOfRedBalls -= 1;
         }
         #endregion
 
@@ -228,6 +241,8 @@ namespace SnookerMate
         void ExecuteEndTurnCommand(object obj)
         {
             IsPlayer1Turn = !IsPlayer1Turn;
+
+            CalculatePointsRemaining();
         }
         #endregion
 
@@ -250,6 +265,9 @@ namespace SnookerMate
             {
                 Player1Score = 0;
                 Player2Score = 0;
+
+                numberOfRedBalls = 15;
+                CalculatePointsRemaining();
             }
         }
         #endregion
@@ -266,8 +284,14 @@ namespace SnookerMate
         }
 
         async void ExecuteSettingsCommand(object obj) => await Application.Current.MainPage.Navigation.PushModalAsync(new SettingsPage());
-
         #endregion
 
+        #region Calculate points remaining
+        void CalculatePointsRemaining()
+        {
+            PointsLeft = (NumberOfRedBalls * 8) + 27;
+        }
+
+        #endregion
     }
 }

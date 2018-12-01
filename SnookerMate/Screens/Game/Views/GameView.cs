@@ -5,7 +5,7 @@ namespace SnookerMate
 {
     public class GameView : ContentView
     {
-        readonly CLabel player1Label, player1Score, player2Label, player2Score;
+        readonly CLabel player1Label, player1Score, player2Label, player2Score, pointsLeft;
         readonly CButton endTurnButton;
         readonly BallButton whiteButton, foulButton, redButton, yellowButton, greenButton, brownButton, blueButton, pinkButton, blackButton;
         readonly ToolBarButton undoButton, endFrameButton, settingsButton;
@@ -43,9 +43,16 @@ namespace SnookerMate
             };
             player2Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Score));
 
+            pointsLeft = new CLabel
+            {
+                FontFamily = "Montserrat-Regular",
+            };
+            pointsLeft.SetBinding(Label.TextProperty, nameof(GameViewModel.PointsLeft));
+
             var playersAndScoresGrid = new Grid
             {
                 RowDefinitions = {
+                    new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto }
                 },
@@ -55,6 +62,7 @@ namespace SnookerMate
             playersAndScoresGrid.Children.Add(player1Score, 0, 1);
             playersAndScoresGrid.Children.Add(player2Label, 1, 0);
             playersAndScoresGrid.Children.Add(player2Score, 1, 1);
+            playersAndScoresGrid.Children.Add(pointsLeft, 0, 2, 2, 3);
             #endregion
 
             #region End Turn Button
