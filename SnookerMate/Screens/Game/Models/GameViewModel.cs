@@ -4,14 +4,16 @@ namespace SnookerMate
 {
     public class GameViewModel : BaseViewModel
     {
-        int WhitePot = 4;
-        int RedPot = 1;
-        int YellowPot = 2;
-        int GreenPot = 3;
-        int BrownPot = 4;
-        int BluePot = 5;
-        int PinkPot = 6;
-        int BlackPot = 7;
+        readonly int WhitePot = 4;
+        readonly int RedPot = 1;
+        readonly int YellowPot = 2;
+        readonly int GreenPot = 3;
+        readonly int BrownPot = 4;
+        readonly int BluePot = 5;
+        readonly int PinkPot = 6;
+        readonly int BlackPot = 7;
+
+        bool isRedToPot = true;
 
         int numberOfRedBalls = 15;
         public int NumberOfRedBalls
@@ -92,18 +94,16 @@ namespace SnookerMate
             get
             {
                 return redBallCommand ??
-                    (redBallCommand = new Command(ExecuteRedBallCommand));
+                    (redBallCommand = new Command(ExecuteRedBallCommandAsync));
             }
         }
 
-        void ExecuteRedBallCommand(object obj)
+        void ExecuteRedBallCommandAsync(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += RedPot;
+            if (NumberOfRedBalls > 0)
+                EvaluateShot(RedPot, true);
             else
-                Player2Score += RedPot;
-
-            numberOfRedBalls -= 1;
+                Application.Current.MainPage.DisplayAlert("No red balls available!", "All red balls have been potted.", "Ok");
         }
         #endregion
 
@@ -120,10 +120,7 @@ namespace SnookerMate
 
         void ExecuteYellowBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += YellowPot;
-            else
-                Player2Score += YellowPot;
+            EvaluateShot(YellowPot, false);
         }
         #endregion
 
@@ -140,10 +137,7 @@ namespace SnookerMate
 
         void ExecuteGreenBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += GreenPot;
-            else
-                Player2Score += GreenPot;
+            EvaluateShot(GreenPot, false);
         }
         #endregion
 
@@ -160,10 +154,7 @@ namespace SnookerMate
 
         void ExecuteBrownBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += BrownPot;
-            else
-                Player2Score += BrownPot;
+            EvaluateShot(BrownPot, false);
         }
         #endregion
 
@@ -180,10 +171,7 @@ namespace SnookerMate
 
         void ExecuteBlueBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += BluePot;
-            else
-                Player2Score += BluePot;
+            EvaluateShot(BluePot, false);
         }
         #endregion
 
@@ -200,10 +188,7 @@ namespace SnookerMate
 
         void ExecutePinkBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += PinkPot;
-            else
-                Player2Score += PinkPot;
+            EvaluateShot(PinkPot, false);
         }
         #endregion
 
@@ -220,10 +205,7 @@ namespace SnookerMate
 
         void ExecuteBlackBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player1Score += BlackPot;
-            else
-                Player2Score += BlackPot;
+            EvaluateShot(BlackPot, false);
         }
         #endregion
 
@@ -241,6 +223,7 @@ namespace SnookerMate
         void ExecuteEndTurnCommand(object obj)
         {
             IsPlayer1Turn = !IsPlayer1Turn;
+            isRedToPot = true;
 
             CalculatePointsRemaining();
         }
@@ -291,7 +274,69 @@ namespace SnookerMate
         {
             PointsLeft = (NumberOfRedBalls * 8) + 27;
         }
-
         #endregion
+
+        async void EvaluateShot(int shotValue, bool isRed)
+        {
+            if (isRedToPot && isRed)
+            {
+                NumberOfRedBalls -= 1;
+                isRedToPot = false;
+
+                if (IsPlayer1Turn)
+                    Player1Score += shotValue;
+                else
+                    Player2Score += shotValue;
+            }
+            else if (!isRedToPot && isRed)
+            {
+                NumberOfRedBalls -= 1;
+                var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "A red ball is already potted. Mark as foul?", "Yes", "No");
+
+                if (foul)
+                {
+                    if (shotValue < 4) shotValue = 4;
+
+                    if (IsPlayer1Turn)
+                        Player2Score += shotValue;
+                    else
+                        Player1Score += shotValue;
+                }
+            }
+            else if (isRedToPot && !isRed)
+            {
+                if (NumberOfRedBalls == 0)
+                {
+                    if (IsPlayer1Turn)
+                        Player1Score += shotValue;
+                    else
+                        Player2Score += shotValue;
+                }
+                else
+                {
+                    var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "No red ball potted. Mark as foul?", "Yes", "No");
+
+                    if (foul)
+                    {
+                        if (shotValue < 4) shotValue = 4;
+
+                        if (IsPlayer1Turn)
+                            Player2Score += shotValue;
+                        else
+                            Player1Score += shotValue;
+                    }
+                }
+
+            }
+            else
+            {
+                if (IsPlayer1Turn)
+                    Player1Score += shotValue;
+                else
+                    Player2Score += shotValue;
+
+                isRedToPot = true;
+            }
+        }
     }
 }
