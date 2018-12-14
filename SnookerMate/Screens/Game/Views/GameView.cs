@@ -17,36 +17,33 @@ namespace SnookerMate
             #region Players and Scores
             player1Label = new CLabel
             {
-                FontSize = 24,
-                FontFamily = "Montserrat-SemiBold"
+                FontSize = 24
             };
             player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
+            player1Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player1Font));
 
             player1Score = new CLabel
             {
-                FontSize = 72,
-                FontFamily = "Montserrat-SemiBold"
+                FontSize = 72
             };
             player1Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Score));
+            player1Score.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player1Font));
 
             player2Label = new CLabel
             {
-                FontSize = 24,
-                FontFamily = "Montserrat-Thin"
+                FontSize = 24
             };
             player2Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Name));
+            player2Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player2Font));
 
             player2Score = new CLabel
             {
-                FontSize = 72,
-                FontFamily = "Montserrat-Thin"
+                FontSize = 72
             };
             player2Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Score));
+            player2Score.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player2Font));
 
-            pointsLeft = new CLabel
-            {
-                FontFamily = "Montserrat-Regular",
-            };
+            pointsLeft = new CLabel();
             pointsLeft.SetBinding(Label.TextProperty, nameof(GameViewModel.PointsLeft));
 
             var playersAndScoresGrid = new Grid
@@ -87,9 +84,11 @@ namespace SnookerMate
 
             redButton = new BallButton
             {
-                BackgroundColor = ColorTheme.Red
+                BackgroundColor = ColorTheme.Red,
+                TextColor = ColorTheme.White
             };
             redButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.RedBallCommand));
+            redButton.SetBinding(Button.TextProperty, nameof(GameViewModel.NumberOfRedBalls));
 
             yellowButton = new BallButton
             {

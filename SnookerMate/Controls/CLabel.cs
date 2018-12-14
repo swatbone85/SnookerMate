@@ -9,6 +9,7 @@ namespace SnookerMate
             TextColor = ColorTheme.White;
             HorizontalTextAlignment = TextAlignment.Center;
             VerticalTextAlignment = TextAlignment.Center;
+            FontFamily = "Montserrat-Regular";
         }
     }
 }

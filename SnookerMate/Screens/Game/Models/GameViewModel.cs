@@ -65,6 +65,20 @@ namespace SnookerMate
             set => SetProperty(ref player2Score, value);
         }
 
+        string player1Font = "Montserrat-SemiBold";
+        public string Player1Font
+        {
+            get => player1Font;
+            set => SetProperty(ref player1Font, value);
+        }
+
+        string player2Font = "Montserrat-Thin";
+        public string Player2Font
+        {
+            get => player2Font;
+            set => SetProperty(ref player2Font, value);
+        }
+
         #endregion
 
         #region White ball command
@@ -222,10 +236,22 @@ namespace SnookerMate
 
         void ExecuteEndTurnCommand(object obj)
         {
+
             IsPlayer1Turn = !IsPlayer1Turn;
             isRedToPot = true;
 
             CalculatePointsRemaining();
+
+            if (IsPlayer1Turn)
+            {
+                Player1Font = "Montserrat-SemiBold";
+                Player2Font = "Montserrat-Thin";
+            }
+            else
+            {
+                Player1Font = "Montserrat-Thin";
+                Player2Font = "Montserrat-SemiBold";
+            }
         }
         #endregion
 
@@ -290,7 +316,6 @@ namespace SnookerMate
             }
             else if (!isRedToPot && isRed)
             {
-                NumberOfRedBalls -= 1;
                 var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "A red ball is already potted. Mark as foul?", "Yes", "No");
 
                 if (foul)
