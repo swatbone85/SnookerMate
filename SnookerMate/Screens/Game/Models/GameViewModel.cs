@@ -27,7 +27,20 @@ namespace SnookerMate
         public bool IsPlayer1Turn
         {
             get => isPlayer1Turn;
-            set => SetProperty(ref isPlayer1Turn, value);
+            set
+            {
+                SetProperty(ref isPlayer1Turn, value);
+                if (value == true)
+                {
+                    Player1Font = "Montserrat-SemiBold";
+                    Player2Font = "Montserrat-Thin";
+                }
+                else
+                {
+                    Player1Font = "Montserrat-Thin";
+                    Player2Font = "Montserrat-SemiBold";
+                }
+            }
         }
 
         int pointsLeft = 147;
@@ -241,17 +254,6 @@ namespace SnookerMate
             isRedToPot = true;
 
             CalculatePointsRemaining();
-
-            if (IsPlayer1Turn)
-            {
-                Player1Font = "Montserrat-SemiBold";
-                Player2Font = "Montserrat-Thin";
-            }
-            else
-            {
-                Player1Font = "Montserrat-Thin";
-                Player2Font = "Montserrat-SemiBold";
-            }
         }
         #endregion
 
@@ -275,8 +277,9 @@ namespace SnookerMate
                 Player1Score = 0;
                 Player2Score = 0;
 
-                numberOfRedBalls = 15;
+                NumberOfRedBalls = 15;
                 CalculatePointsRemaining();
+                IsPlayer1Turn = true;
             }
         }
         #endregion
