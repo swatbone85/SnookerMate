@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Google.MobileAds;
 using UIKit;
 
 namespace SnookerMate.iOS
@@ -24,6 +25,8 @@ namespace SnookerMate.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+
+            MobileAds.Configure("ca-app-pub-1438547612946932~4388953377");
 
             return base.FinishedLaunching(app, options);
         }

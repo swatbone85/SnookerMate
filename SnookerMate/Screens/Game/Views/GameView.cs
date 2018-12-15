@@ -5,6 +5,7 @@ namespace SnookerMate
 {
     public class GameView : ContentView
     {
+        readonly AdMobView adMobView;
         readonly CLabel player1Label, player1Score, player2Label, player2Score, pointsLeft;
         readonly CButton endTurnButton;
         readonly BallButton whiteButton, foulButton, redButton, yellowButton, greenButton, brownButton, blueButton, pinkButton, blackButton;
@@ -14,32 +15,24 @@ namespace SnookerMate
         {
             BackgroundColor = ColorTheme.BackgroundGreen;
 
+            #region AdMob
+            adMobView = new AdMobView();
+            #endregion
+
             #region Players and Scores
-            player1Label = new CLabel
-            {
-                FontSize = 24
-            };
+            player1Label = new CLabelName();
             player1Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Name));
             player1Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player1Font));
 
-            player1Score = new CLabel
-            {
-                FontSize = 72
-            };
+            player1Score = new CLabelScore();
             player1Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player1Score));
             player1Score.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player1Font));
 
-            player2Label = new CLabel
-            {
-                FontSize = 24
-            };
+            player2Label = new CLabelName();
             player2Label.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Name));
             player2Label.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player2Font));
 
-            player2Score = new CLabel
-            {
-                FontSize = 72
-            };
+            player2Score = new CLabelScore();
             player2Score.SetBinding(Label.TextProperty, nameof(GameViewModel.Player2Score));
             player2Score.SetBinding(Label.FontFamilyProperty, nameof(GameViewModel.Player2Font));
 
@@ -53,7 +46,7 @@ namespace SnookerMate
                     new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto }
                 },
-                Margin = new Thickness(0, 50, 0, 0)
+                Margin = new Thickness(0, 20, 0, 0)
             };
             playersAndScoresGrid.Children.Add(player1Label, 0, 0);
             playersAndScoresGrid.Children.Add(player1Score, 0, 1);
@@ -174,6 +167,7 @@ namespace SnookerMate
             {
                 RowDefinitions = {
                     new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Star },
                     new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto }
@@ -181,9 +175,10 @@ namespace SnookerMate
                 RowSpacing = 0,
                 ColumnSpacing = 0
             };
-            contentGrid.Children.Add(playersAndScoresGrid, 0, 0);
-            contentGrid.Children.Add(endTurnButton, 0, 2);
-            contentGrid.Children.Add(buttonGrid, 0, 3);
+            contentGrid.Children.Add(adMobView, 0, 0);
+            contentGrid.Children.Add(playersAndScoresGrid, 0, 1);
+            contentGrid.Children.Add(endTurnButton, 0, 3);
+            contentGrid.Children.Add(buttonGrid, 0, 4);
 
             Content = contentGrid;
         }
