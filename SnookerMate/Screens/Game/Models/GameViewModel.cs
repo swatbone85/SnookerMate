@@ -344,8 +344,12 @@ namespace SnookerMate
 
         void ChangeTurn()
         {
+            if (NumberOfRedBalls == 0)
+                IsEndGame = true;
+            else
+                IsRedToPot = true;
+
             IsPlayer1Turn = !IsPlayer1Turn;
-            IsRedToPot = true;
 
             CalculatePointsRemaining();
         }
@@ -372,8 +376,6 @@ namespace SnookerMate
                         if (foul)
                         {
                             Foul(shotValue);
-                            //TODO: Does the fouled ball return?
-                            //colorSequence.Remove(shotValue);
                         }
                     }
                 }
