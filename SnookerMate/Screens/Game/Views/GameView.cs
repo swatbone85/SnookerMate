@@ -46,7 +46,7 @@ namespace SnookerMate
                     new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto }
                 },
-                Margin = new Thickness(0, 20, 0, 0)
+                Margin = new Thickness(0, 40, 0, 0)
             };
             playersAndScoresGrid.Children.Add(player1Label, 0, 0);
             playersAndScoresGrid.Children.Add(player1Score, 0, 1);
@@ -148,11 +148,11 @@ namespace SnookerMate
                     new RowDefinition { Height = GridLength.Auto }
                 },
                 RowSpacing = 0,
-                ColumnSpacing = 0
+                ColumnSpacing = 0,
+                Margin = new Thickness(0, 0, 0, 10)
             };
             buttonGrid.Children.Add(whiteButton, 0, 0);
-            buttonGrid.Children.Add(foulButton, 1, 0);
-            buttonGrid.Children.Add(redButton, 2, 0);
+            buttonGrid.Children.Add(redButton, 1, 3, 0, 1);
             buttonGrid.Children.Add(yellowButton, 0, 1);
             buttonGrid.Children.Add(greenButton, 1, 1);
             buttonGrid.Children.Add(brownButton, 2, 1);
@@ -167,18 +167,18 @@ namespace SnookerMate
             {
                 RowDefinitions = {
                     new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Star },
+                    new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto },
                     new RowDefinition { Height = GridLength.Auto }
                 },
                 RowSpacing = 0,
                 ColumnSpacing = 0
             };
-            contentGrid.Children.Add(adMobView, 0, 0);
-            contentGrid.Children.Add(playersAndScoresGrid, 0, 1);
-            contentGrid.Children.Add(endTurnButton, 0, 3);
-            contentGrid.Children.Add(buttonGrid, 0, 4);
+            contentGrid.Children.Add(playersAndScoresGrid, 0, 0);
+            contentGrid.Children.Add(endTurnButton, 0, 2);
+            contentGrid.Children.Add(buttonGrid, 0, 3);
+            contentGrid.Children.Add(adMobView, 0, 4);
 
             Content = contentGrid;
         }

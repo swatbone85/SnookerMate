@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Xamarin.Forms;
 
 namespace SnookerMate
 {
@@ -13,7 +15,21 @@ namespace SnookerMate
         readonly int PinkPot = 6;
         readonly int BlackPot = 7;
 
-        bool isRedToPot = true;
+        public bool IsRedToPot { get; set; } = true;
+
+        bool isEndGame;
+        public bool IsEndGame
+        {
+            get => isEndGame;
+
+            set
+            {
+                isEndGame = value;
+                colorSequence = new List<int> { YellowPot, GreenPot, BrownPot, BluePot, PinkPot, BlackPot };
+            }
+        }
+
+        List<int> colorSequence;
 
         int numberOfRedBalls = 15;
         public int NumberOfRedBalls
@@ -105,12 +121,12 @@ namespace SnookerMate
             }
         }
 
-        void ExecuteWhiteBallCommand(object obj)
+        async void ExecuteWhiteBallCommand(object obj)
         {
-            if (IsPlayer1Turn)
-                Player2Score += WhitePot;
-            else
-                Player1Score += WhitePot;
+            var foul = await Application.Current.MainPage.DisplayAlert("White potted!", "Mark as foul?", "Yes", "No");
+
+            if (foul)
+                Foul(WhitePot);
         }
         #endregion
 
@@ -249,11 +265,7 @@ namespace SnookerMate
 
         void ExecuteEndTurnCommand(object obj)
         {
-
-            IsPlayer1Turn = !IsPlayer1Turn;
-            isRedToPot = true;
-
-            CalculatePointsRemaining();
+            ChangeTurn();
         }
         #endregion
 
@@ -278,8 +290,10 @@ namespace SnookerMate
                 Player2Score = 0;
 
                 NumberOfRedBalls = 15;
-                CalculatePointsRemaining();
                 IsPlayer1Turn = true;
+                IsEndGame = false;
+
+                CalculatePointsRemaining();
             }
         }
         #endregion
@@ -301,70 +315,113 @@ namespace SnookerMate
         #region Calculate points remaining
         void CalculatePointsRemaining()
         {
-            PointsLeft = (NumberOfRedBalls * 8) + 27;
+            if (IsEndGame)
+                PointsLeft = colorSequence.Sum();
+            else
+                PointsLeft = (NumberOfRedBalls * 8) + 27;
         }
         #endregion
 
+        void Score(int score)
+        {
+            if (IsPlayer1Turn)
+                Player1Score += score;
+            else
+                Player2Score += score;
+        }
+
+        void Foul(int points)
+        {
+            if (points < 4) points = 4;
+
+            if (IsPlayer1Turn)
+                Player2Score += points;
+            else
+                Player1Score += points;
+
+            ChangeTurn();
+        }
+
+        void ChangeTurn()
+        {
+            IsPlayer1Turn = !IsPlayer1Turn;
+            IsRedToPot = true;
+
+            CalculatePointsRemaining();
+        }
+
         async void EvaluateShot(int shotValue, bool isRed)
         {
-            if (isRedToPot && isRed)
+            if (IsEndGame)
             {
-                NumberOfRedBalls -= 1;
-                isRedToPot = false;
-
-                if (IsPlayer1Turn)
-                    Player1Score += shotValue;
-                else
-                    Player2Score += shotValue;
-            }
-            else if (!isRedToPot && isRed)
-            {
-                var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "A red ball is already potted. Mark as foul?", "Yes", "No");
-
-                if (foul)
+                if (colorSequence.Count > 0)
                 {
-                    if (shotValue < 4) shotValue = 4;
+                    if (shotValue == colorSequence[0])
+                    {
+                        Score(shotValue);
+                        colorSequence.RemoveAt(0);
 
-                    if (IsPlayer1Turn)
-                        Player2Score += shotValue;
+                        if (colorSequence.Count == 0)
+                            await Application.Current.MainPage.DisplayAlert("Game Over!", "All balls have been potted! The game is over.", "Ok!");
+
+                    }
                     else
-                        Player1Score += shotValue;
-                }
-            }
-            else if (isRedToPot && !isRed)
-            {
-                if (NumberOfRedBalls == 0)
-                {
-                    if (IsPlayer1Turn)
-                        Player1Score += shotValue;
-                    else
-                        Player2Score += shotValue;
+                    {
+                        var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "A wrong color ball was potted. Mark as foul?", "Yes", "No");
+
+                        if (foul)
+                        {
+                            Foul(shotValue);
+                            //TODO: Does the fouled ball return?
+                            //colorSequence.Remove(shotValue);
+                        }
+                    }
                 }
                 else
+                    await Application.Current.MainPage.DisplayAlert("Game Over!", "All balls have been potted! The game is over.", "Ok!");
+
+            }
+            else
+            {
+                if (IsRedToPot && isRed)
+                {
+                    NumberOfRedBalls -= 1;
+                    IsRedToPot = false;
+
+                    Score(shotValue);
+                }
+                else if (!IsRedToPot && isRed)
+                {
+                    var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "A red ball is already potted. Mark as foul?", "Yes", "No");
+
+                    if (foul)
+                    {
+                        Foul(shotValue);
+                    }
+                }
+                else if (IsRedToPot && !isRed)
                 {
                     var foul = await Application.Current.MainPage.DisplayAlert("Are you sure?", "No red ball potted. Mark as foul?", "Yes", "No");
 
                     if (foul)
                     {
-                        if (shotValue < 4) shotValue = 4;
-
-                        if (IsPlayer1Turn)
-                            Player2Score += shotValue;
-                        else
-                            Player1Score += shotValue;
+                        Foul(shotValue);
                     }
                 }
-
-            }
-            else
-            {
-                if (IsPlayer1Turn)
-                    Player1Score += shotValue;
                 else
-                    Player2Score += shotValue;
+                {
+                    if (NumberOfRedBalls == 0)
+                    {
+                        Score(shotValue);
+                        IsEndGame = true;
+                    }
+                    else
+                        Score(shotValue);
 
-                isRedToPot = true;
+                    IsRedToPot = true;
+                }
             }
+            CalculatePointsRemaining();
         }
     }
 }

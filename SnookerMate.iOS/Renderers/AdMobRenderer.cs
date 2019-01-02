@@ -26,7 +26,7 @@ namespace SnookerMate.iOS.Renderers
                 adView = new BannerView(AdSizeCons.SmartBannerPortrait)
                 {
                     //AdUnitID = "ca-app-pub-1438547612946932/9826657476",
-                    AdUnitID = "ca-app-pub-3940256099942544/2934735716", // Sample Ad
+                    AdUnitID = "ca-app-pub-3940256099942544/2934735716", //Test Ad
                     RootViewController = GetRootViewController()
                 };
 
