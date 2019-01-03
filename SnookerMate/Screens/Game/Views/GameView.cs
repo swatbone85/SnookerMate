@@ -9,7 +9,7 @@ namespace SnookerMate
         readonly CLabel player1Label, player1Score, player2Label, player2Score, pointsLeft;
         readonly CButton endTurnButton;
         readonly BallButton whiteButton, foulButton, redButton, yellowButton, greenButton, brownButton, blueButton, pinkButton, blackButton;
-        readonly ToolBarButton undoButton, endFrameButton, settingsButton;
+        readonly ToolBarButton restartButton, endFrameButton, settingsButton;
 
         public GameView()
         {
@@ -121,10 +121,11 @@ namespace SnookerMate
             #endregion
 
             #region bottomBarButtons
-            undoButton = new ToolBarButton
+            restartButton = new ToolBarButton
             {
-                Text = "Undo"
+                Text = "Restart"
             };
+            restartButton.SetBinding(Button.CommandProperty, nameof(GameViewModel.RestartFrameCommand));
 
             endFrameButton = new ToolBarButton
             {
@@ -159,7 +160,7 @@ namespace SnookerMate
             buttonGrid.Children.Add(blueButton, 0, 2);
             buttonGrid.Children.Add(pinkButton, 1, 2);
             buttonGrid.Children.Add(blackButton, 2, 2);
-            buttonGrid.Children.Add(undoButton, 0, 3);
+            buttonGrid.Children.Add(restartButton, 0, 3);
             buttonGrid.Children.Add(endFrameButton, 1, 3);
             buttonGrid.Children.Add(settingsButton, 2, 3);
 

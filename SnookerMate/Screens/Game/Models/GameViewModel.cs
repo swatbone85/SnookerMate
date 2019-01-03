@@ -15,56 +15,11 @@ namespace SnookerMate
         readonly int PinkPot = 6;
         readonly int BlackPot = 7;
 
+        List<int> ColorSequence = new List<int> { 2, 3, 4, 5, 6, 7 };
+
         public bool IsRedToPot { get; set; } = true;
 
-        bool isEndGame;
-        public bool IsEndGame
-        {
-            get => isEndGame;
-
-            set
-            {
-                isEndGame = value;
-                colorSequence = new List<int> { YellowPot, GreenPot, BrownPot, BluePot, PinkPot, BlackPot };
-            }
-        }
-
-        List<int> colorSequence;
-
-        int numberOfRedBalls = 15;
-        public int NumberOfRedBalls
-        {
-            get => numberOfRedBalls;
-            set => SetProperty(ref numberOfRedBalls, value);
-        }
-
         #region Properties
-        bool isPlayer1Turn = true;
-        public bool IsPlayer1Turn
-        {
-            get => isPlayer1Turn;
-            set
-            {
-                SetProperty(ref isPlayer1Turn, value);
-                if (value == true)
-                {
-                    Player1Font = "Montserrat-SemiBold";
-                    Player2Font = "Montserrat-Thin";
-                }
-                else
-                {
-                    Player1Font = "Montserrat-Thin";
-                    Player2Font = "Montserrat-SemiBold";
-                }
-            }
-        }
-
-        int pointsLeft = 147;
-        public int PointsLeft
-        {
-            get => pointsLeft;
-            set => SetProperty(ref pointsLeft, value);
-        }
 
         string player1Name = "Player 1";
         public string Player1Name
@@ -108,6 +63,51 @@ namespace SnookerMate
             set => SetProperty(ref player2Font, value);
         }
 
+        bool isEndGame;
+        public bool IsEndGame
+        {
+            get => isEndGame;
+
+            set
+            {
+                isEndGame = value;
+                ColorSequence = new List<int> { YellowPot, GreenPot, BrownPot, BluePot, PinkPot, BlackPot };
+            }
+        }
+
+        bool isPlayer1Turn = true;
+        public bool IsPlayer1Turn
+        {
+            get => isPlayer1Turn;
+            set
+            {
+                SetProperty(ref isPlayer1Turn, value);
+                if (value == true)
+                {
+                    Player1Font = "Montserrat-SemiBold";
+                    Player2Font = "Montserrat-Thin";
+                }
+                else
+                {
+                    Player1Font = "Montserrat-Thin";
+                    Player2Font = "Montserrat-SemiBold";
+                }
+            }
+        }
+
+        int pointsLeft = 147;
+        public int PointsLeft
+        {
+            get => pointsLeft;
+            set => SetProperty(ref pointsLeft, value);
+        }
+
+        int numberOfRedBalls = 15;
+        public int NumberOfRedBalls
+        {
+            get => numberOfRedBalls;
+            set => SetProperty(ref numberOfRedBalls, value);
+        }
         #endregion
 
         #region White ball command
@@ -269,6 +269,28 @@ namespace SnookerMate
         }
         #endregion
 
+        #region Restart frame Command
+        Command restartFrameCommand;
+        public Command RestartFrameCommand
+        {
+            get
+            {
+                return restartFrameCommand ??
+                    (restartFrameCommand = new Command(ExecuteRestartFrameCommand));
+            }
+        }
+
+        async void ExecuteRestartFrameCommand(object obj)
+        {
+            var restartFrame = await Application.Current.MainPage.DisplayAlert("Restart Frame?", "Are you sure you want to restart this frame?", "Restart Frame", "Cancel");
+
+            if (restartFrame.Equals(true))
+            {
+                NewFrame();
+            }
+        }
+        #endregion
+
         #region End frame Command
         Command endFrameCommand;
         public Command EndFrameCommand
@@ -282,18 +304,11 @@ namespace SnookerMate
 
         async void ExecuteEndFrameCommand(object obj)
         {
-            var endFrame = await Application.Current.MainPage.DisplayAlert("End Frame", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
+            var endFrame = await Application.Current.MainPage.DisplayAlert("End Frame?", "Are you sure you want to end the current frame?", "End Frame", "Cancel");
 
             if (endFrame.Equals(true))
             {
-                Player1Score = 0;
-                Player2Score = 0;
-
-                NumberOfRedBalls = 15;
-                IsPlayer1Turn = true;
-                IsEndGame = false;
-
-                CalculatePointsRemaining();
+                NewFrame();
             }
         }
         #endregion
@@ -315,10 +330,7 @@ namespace SnookerMate
         #region Calculate points remaining
         void CalculatePointsRemaining()
         {
-            if (IsEndGame)
-                PointsLeft = colorSequence.Sum();
-            else
-                PointsLeft = (NumberOfRedBalls * 8) + 27;
+            PointsLeft = (NumberOfRedBalls * 8) + ColorSequence.Sum();
         }
         #endregion
 
@@ -354,18 +366,30 @@ namespace SnookerMate
             CalculatePointsRemaining();
         }
 
+        void NewFrame()
+        {
+            Player1Score = 0;
+            Player2Score = 0;
+
+            NumberOfRedBalls = 15;
+            IsPlayer1Turn = true;
+            IsEndGame = false;
+
+            CalculatePointsRemaining();
+        }
+
         async void EvaluateShot(int shotValue, bool isRed)
         {
             if (IsEndGame)
             {
-                if (colorSequence.Count > 0)
+                if (ColorSequence.Count > 0)
                 {
-                    if (shotValue == colorSequence[0])
+                    if (shotValue == ColorSequence[0])
                     {
                         Score(shotValue);
-                        colorSequence.RemoveAt(0);
+                        ColorSequence.RemoveAt(0);
 
-                        if (colorSequence.Count == 0)
+                        if (ColorSequence.Count == 0)
                             await Application.Current.MainPage.DisplayAlert("Game Over!", "All balls have been potted! The game is over.", "Ok!");
 
                     }
